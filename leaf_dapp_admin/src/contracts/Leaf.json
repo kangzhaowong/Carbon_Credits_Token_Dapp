@@ -411,6 +411,30 @@
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "_company_address",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "exchangeTokens",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "bytes32",
 				"name": "role",
 				"type": "bytes32"
@@ -496,73 +520,6 @@
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "leaf_answers",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"name": "leaf_codes",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_idx",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_code",
-				"type": "string"
-			}
-		],
-		"name": "mint",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "uint256",
 				"name": "_difficulty",
 				"type": "uint256"
@@ -615,7 +572,7 @@
 		"inputs": [
 			{
 				"internalType": "string",
-				"name": "_idx",
+				"name": "_permit_id",
 				"type": "string"
 			},
 			{
@@ -629,7 +586,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "newLeafCode",
+		"name": "newPermit",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -643,17 +600,36 @@
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "_company_address",
-				"type": "address"
+				"internalType": "string",
+				"name": "",
+				"type": "string"
 			},
 			{
 				"internalType": "uint256",
-				"name": "_tokens",
+				"name": "",
 				"type": "uint256"
 			}
 		],
-		"name": "recieveMoney",
+		"name": "permit_answers",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"name": "permit_value",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -661,7 +637,7 @@
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "payable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -820,12 +796,36 @@
 	{
 		"inputs": [
 			{
+				"internalType": "string",
+				"name": "_permit_id",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_code",
+				"type": "string"
+			}
+		],
+		"name": "usePermit",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "_amount",
 				"type": "uint256"
 			}
 		],
-		"name": "withdrawBalance",
+		"name": "withdrawOwnerBalance",
 		"outputs": [
 			{
 				"internalType": "bool",
