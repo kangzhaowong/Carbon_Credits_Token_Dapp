@@ -79,8 +79,14 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     return await ref.read(ContractService.provider).getAllCompanyData();
   }
 
+  __getCompanyFunds() async {
+    return await ref.read(ContractService.provider).getAllCompanyFunds();
+  }
+
   void __tradeTokens(context) async {
     var companyData = await __showCompanyData();
+    var companyFunds = await __getCompanyFunds();
+    print(companyFunds);
     showDialog(
         context: context,
         builder: (context) {
@@ -96,7 +102,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     scrollDown();
                   },
                   child: Text(
-                      "${companyData[index][0]}: 1 LEAF to ${companyData[index][1]} Wei"));
+                      "${companyData[index][0]}(Funds Left:${companyFunds[index]}): 1 LEAF to ${companyData[index][1]} Wei"));
             }, childCount: companyData.length))
           ]));
         });
@@ -164,7 +170,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                                     );
                                   });
                             },
-                            tooltip: 'Scan Leaf Code',
+                            tooltip: 'Scan Permit',
                             child: const Icon(Icons.eco)),
                         FloatingActionButton(
                             heroTag: null,

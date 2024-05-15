@@ -123,6 +123,11 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     scrollDown();
   }
 
+  void __allCompanyFunds() async {
+    await ref.read(ContractService.provider).getAllCompanyFunds();
+    scrollDown();
+  }
+
   void __checkTokenBalance() async {
     await ref.read(ContractService.provider).checkTokenBalance();
     scrollDown();
@@ -255,6 +260,11 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                               onPressed: __allCompanyData,
                               tooltip: 'Get All Company Data',
                               child: const Icon(Icons.insert_chart),
+                            ),
+                            FloatingActionButton(
+                              onPressed: __allCompanyFunds,
+                              tooltip: 'Get All Company Funds',
+                              child: const Icon(Icons.assured_workload),
                             ),
                             FloatingActionButton(
                                 onPressed: __checkTokenBalance,

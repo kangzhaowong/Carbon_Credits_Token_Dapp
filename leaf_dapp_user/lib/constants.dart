@@ -7,5 +7,5 @@ class Constants {
   static const String myPrivateKey =
       "0x376b550226704a118843eab06758048220d2bee4ab1c06c0b378342f9d1a27a6";
   static const String CONTRACT_ADDRESS =
-      "0xe02D8EF124585B8AE7797B1F635aaAf05ae7B092";
+      "0x293c0DB46F632C6c92D52ED5e25Ae76dC6502b5A";
 }

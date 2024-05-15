@@ -40,6 +40,7 @@ class ContractService extends ChangeNotifier {
   late final ContractFunction _getCompanyAddresses;
   late final ContractFunction _getCompanyData;
   late final ContractFunction _getTokenBalance;
+  late final ContractFunction _getCompanyFunds;
 
   late int difficulty;
   String qrcodetext = "";
@@ -70,19 +71,20 @@ class ContractService extends ChangeNotifier {
     _contract = DeployedContract(
         ContractAbi.fromJson(_abiCode, "LeafContract"), _contractAddress);
     _difficulty = _contract.function("difficulty");
-    _newLeafCode = _contract.function("newLeafCode");
+    _newLeafCode = _contract.function("newPermit");
     _addFunds = _contract.function("addFunds");
     _modifyExchangeRate = _contract.function("modifyExchangeRate");
     _modifyDifficulty = _contract.function("modifyDifficulty");
     _checkOwnerBalance = _contract.function("checkOwnerBalance");
-    _withdrawOwnerBalance = _contract.function("withdrawBalance");
+    _withdrawOwnerBalance = _contract.function("withdrawOwnerBalance");
     _addPartnerCompany = _contract.function("addPartnerCompany");
     _removePartnerCompany = _contract.function("removePartnerCompany");
-    _mint = _contract.function("mint");
-    _recieveMoney = _contract.function("recieveMoney");
+    _mint = _contract.function("usePermit");
+    _recieveMoney = _contract.function("exchangeTokens");
     _getCompanyAddresses = _contract.function("allCompanyAddresses");
     _getCompanyData = _contract.function("company_data");
     _getTokenBalance = _contract.function("balanceOf");
+    _getCompanyFunds = _contract.function("company_funds");
   }
 
   addToConsole(var info, var msg) {
@@ -359,6 +361,31 @@ class ContractService extends ChangeNotifier {
           params: [companiesAddresses[i]]).then((value) {
         addToConsole(
             "Company Data @${companiesAddresses[i]}: ", value.toString());
+      }).onError((error, stackTrace) {
+        addToConsole("Error: ", error);
+      });
+    }
+    addToConsole("", "");
+  }
+
+  getAllCompanyFunds() async {
+    List companiesAddresses = List.empty(growable: true);
+    await _web3client.call(
+        contract: _contract,
+        function: _getCompanyAddresses,
+        params: []).then((value) {
+      companiesAddresses = value[0];
+    }).onError((error, stackTrace) {
+      addToConsole("Error: ", error);
+    });
+
+    for (int i = 0; i < companiesAddresses.length; i++) {
+      await _web3client.call(
+          contract: _contract,
+          function: _getCompanyFunds,
+          params: [companiesAddresses[i]]).then((value) {
+        addToConsole(
+            "Company Funds @${companiesAddresses[i]}: ", "${value.first} Wei");
       }).onError((error, stackTrace) {
         addToConsole("Error: ", error);
       });

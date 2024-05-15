@@ -32,6 +32,7 @@ class ContractService extends ChangeNotifier {
   late final ContractFunction _getCompanyAddresses;
   late final ContractFunction _getCompanyData;
   late final ContractFunction _getTokenBalance;
+  late final ContractFunction _getCompanyFunds;
 
   late int difficulty;
   String qrcodetext = "";
@@ -57,11 +58,12 @@ class ContractService extends ChangeNotifier {
   Future<void> _getDeployedContract() async {
     _contract = DeployedContract(
         ContractAbi.fromJson(_abiCode, "LeafContract"), _contractAddress);
-    _mint = _contract.function("mint");
-    _recieveMoney = _contract.function("recieveMoney");
+    _mint = _contract.function("usePermit");
+    _recieveMoney = _contract.function("exchangeTokens");
     _getCompanyAddresses = _contract.function("allCompanyAddresses");
     _getCompanyData = _contract.function("company_data");
     _getTokenBalance = _contract.function("balanceOf");
+    _getCompanyFunds = _contract.function("company_funds");
   }
 
   addToConsole(var info, var msg) {
@@ -154,6 +156,33 @@ class ContractService extends ChangeNotifier {
     }
     // addToConsole("", "");
     return companyData;
+  }
+
+  getAllCompanyFunds() async {
+    List companiesAddresses = List.empty(growable: true);
+    await _web3client.call(
+        contract: _contract,
+        function: _getCompanyAddresses,
+        params: []).then((value) {
+      companiesAddresses = value[0];
+    }).onError((error, stackTrace) {
+      addToConsole("Error: ", error);
+    });
+
+    List companyFunds = List.empty(growable: true);
+    for (int i = 0; i < companiesAddresses.length; i++) {
+      await _web3client.call(
+          contract: _contract,
+          function: _getCompanyFunds,
+          params: [companiesAddresses[i]]).then((value) {
+        var temp = "${value.first} Wei";
+        companyFunds.add(temp);
+      }).onError((error, stackTrace) {
+        addToConsole("Error: ", error);
+      });
+    }
+    // addToConsole("", "");
+    return companyFunds;
   }
 
   checkTokenBalance() async {
