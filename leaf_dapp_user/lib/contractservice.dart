@@ -7,7 +7,7 @@ import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:uuid/uuid.dart';
 import 'package:leafdapp_user/constants.dart';
-// import 'package:web3dart/crypto.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 var uuid = const Uuid();
 
@@ -17,6 +17,8 @@ class ContractService extends ChangeNotifier {
   static AlwaysAliveProviderBase<ContractService> get provider =>
       _contractProvider;
   bool loading = true;
+  final _storage = const FlutterSecureStorage();
+  bool noKeyFlag = true;
 
   var consoletext = "";
 
@@ -24,8 +26,8 @@ class ContractService extends ChangeNotifier {
   late final DeployedContract _contract;
   late final EthereumAddress _contractAddress;
   late final String _abiCode;
-  final Credentials _credentials =
-      EthPrivateKey.fromHex(Constants.myPrivateKey);
+  // Credentials _credentials = EthPrivateKey.fromHex(Constants.myPrivateKey);
+  late Credentials _credentials;
 
   late final ContractFunction _mint;
   late final ContractFunction _recieveMoney;
@@ -38,7 +40,31 @@ class ContractService extends ChangeNotifier {
   String qrcodetext = "";
 
   ContractService() {
+    getStoredKey();
     _initWeb3();
+  }
+
+  getStoredKey() async {
+    String? storedPrivateKey = await _storage.read(key: "PRIVATEKEY");
+    if (storedPrivateKey != null) {
+      addToConsole("Key: ", storedPrivateKey);
+      _credentials = EthPrivateKey.fromHex(storedPrivateKey);
+      noKeyFlag = false;
+    } else {
+      addToConsole("Key: ", "Null");
+      noKeyFlag = true;
+    }
+    notifyListeners();
+  }
+
+  setStoredKey(String newKey) async {
+    if (newKey == "") {
+      await _storage.delete(key: "PRIVATEKEY");
+    } else {
+      await _storage.write(key: "PRIVATEKEY", value: newKey);
+    }
+    await getStoredKey();
+    notifyListeners();
   }
 
   Future<void> _initWeb3() async {

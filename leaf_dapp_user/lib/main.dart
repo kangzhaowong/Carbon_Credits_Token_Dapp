@@ -35,6 +35,7 @@ class MyHomePage extends ConsumerStatefulWidget {
 
 class _MyHomePageState extends ConsumerState<MyHomePage> {
   final ScrollController _consoleScrollController = ScrollController();
+  final TextEditingController keyInputController = TextEditingController();
 
   scrollDown() {
     setState(() {
@@ -83,10 +84,17 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     return await ref.read(ContractService.provider).getAllCompanyFunds();
   }
 
+  __getStoredKey() async {
+    return await ref.read(ContractService.provider).getStoredKey();
+  }
+
+  __setStoredKey(String newKey) async {
+    await ref.read(ContractService.provider).setStoredKey(newKey);
+  }
+
   void __tradeTokens(context) async {
     var companyData = await __showCompanyData();
     var companyFunds = await __getCompanyFunds();
-    print(companyFunds);
     showDialog(
         context: context,
         builder: (context) {
@@ -179,6 +187,41 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                             },
                             tooltip: 'Trade Tokens',
                             child: const Icon(Icons.currency_exchange)),
+                        FloatingActionButton(
+                            heroTag: null,
+                            onPressed: __getStoredKey,
+                            tooltip: 'Get Stored Key',
+                            child: const Icon(Icons.key)),
+                        FloatingActionButton(
+                            heroTag: null,
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (dialogContext) => AlertDialog(
+                                        title: const Text('Enter Key'),
+                                        content: TextField(
+                                            decoration: const InputDecoration(
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            controller: keyInputController),
+                                        actions: <Widget>[
+                                          TextButton(
+                                              onPressed: () {
+                                                __setStoredKey(
+                                                    keyInputController.text);
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('Ok')),
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(
+                                                context, 'Cancel'),
+                                            child: const Text('Cancel'),
+                                          )
+                                        ],
+                                      ));
+                            },
+                            tooltip: 'Set Stored Key',
+                            child: const Icon(Icons.vpn_key)),
                       ])))
         ]));
   }
