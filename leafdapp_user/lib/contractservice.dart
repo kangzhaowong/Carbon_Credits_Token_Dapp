@@ -1,4 +1,5 @@
 import 'dart:convert';
+import "dart:math";
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,7 +27,7 @@ class ContractService extends ChangeNotifier {
   late final DeployedContract _contract;
   late final EthereumAddress _contractAddress;
   late final String _abiCode;
-  // Credentials _credentials = EthPrivateKey.fromHex(Constants.myPrivateKey);
+  //Credentials _credentials = EthPrivateKey.fromHex(Constants.myPrivateKey);
   late Credentials _credentials;
 
   late final ContractFunction _mint;
@@ -40,18 +41,17 @@ class ContractService extends ChangeNotifier {
   String qrcodetext = "";
 
   ContractService() {
-    getStoredKey();
     _initWeb3();
+    getStoredKey();
   }
 
   getStoredKey() async {
     String? storedPrivateKey = await _storage.read(key: "PRIVATEKEY");
     if (storedPrivateKey != null) {
-      addToConsole("Key: ", storedPrivateKey);
       _credentials = EthPrivateKey.fromHex(storedPrivateKey);
       noKeyFlag = false;
     } else {
-      addToConsole("Key: ", "Null");
+      _credentials = EthPrivateKey.fromHex(Constants.myPrivateKey);
       noKeyFlag = true;
     }
     notifyListeners();
@@ -68,11 +68,12 @@ class ContractService extends ChangeNotifier {
   }
 
   Future<void> _initWeb3() async {
+    _credentials = EthPrivateKey.fromHex(Constants.myPrivateKey);
     _web3client = Web3Client(Constants.RPC_URL, Client(), socketConnector: () {
       return IOWebSocketChannel.connect(Constants.WS_URL).cast<String>();
     });
     await _getAbi();
-    await _getDeployedContract();
+    _getDeployedContract();
   }
 
   Future<void> _getAbi() async {
@@ -81,7 +82,7 @@ class ContractService extends ChangeNotifier {
     _contractAddress = EthereumAddress.fromHex(Constants.CONTRACT_ADDRESS);
   }
 
-  Future<void> _getDeployedContract() async {
+  _getDeployedContract() {
     _contract = DeployedContract(
         ContractAbi.fromJson(_abiCode, "LeafContract"), _contractAddress);
     _mint = _contract.function("usePermit");
@@ -162,7 +163,8 @@ class ContractService extends ChangeNotifier {
         params: []).then((value) {
       companiesAddresses = value[0];
     }).onError((error, stackTrace) {
-      addToConsole("Error: ", error);
+      print(error);
+      companiesAddresses = [];
     });
 
     List companyData = List.empty(growable: true);
@@ -174,57 +176,43 @@ class ContractService extends ChangeNotifier {
         var temp = value.toList();
         temp.add(companiesAddresses[i]);
         companyData.add(temp);
-        // addToConsole(
-        //     "Company Data @${companiesAddresses[i]}: ", value.toString());
       }).onError((error, stackTrace) {
-        addToConsole("Error: ", error);
+        var temp = ["NIL", 0, companiesAddresses[i]];
+        companyData.add(temp);
       });
     }
-    // addToConsole("", "");
-    return companyData;
-  }
 
-  getAllCompanyFunds() async {
-    List companiesAddresses = List.empty(growable: true);
-    await _web3client.call(
-        contract: _contract,
-        function: _getCompanyAddresses,
-        params: []).then((value) {
-      companiesAddresses = value[0];
-    }).onError((error, stackTrace) {
-      addToConsole("Error: ", error);
-    });
-
-    List companyFunds = List.empty(growable: true);
     for (int i = 0; i < companiesAddresses.length; i++) {
       await _web3client.call(
           contract: _contract,
           function: _getCompanyFunds,
           params: [companiesAddresses[i]]).then((value) {
-        var temp = "${value.first} Wei";
-        companyFunds.add(temp);
+        var temp = value.first;
+        companyData[i].add(temp);
       }).onError((error, stackTrace) {
-        addToConsole("Error: ", error);
+        companyData[i].add(0);
       });
     }
-    // addToConsole("", "");
-    return companyFunds;
+
+    return companyData;
   }
 
   checkTokenBalance() async {
-    await _web3client.call(
+    var value = await _web3client.call(
         contract: _contract,
         function: _getTokenBalance,
-        params: [_credentials.address]).then((value) {
-      addToConsole("Your Token Balance: ", "${value[0]} LEAF");
-      addToConsole("", "");
-    }).onError((error, stackTrace) => addToConsole("Error: ", error));
+        params: [_credentials.address]).onError((error, stackTrace) {
+      return [0];
+    });
+    return value.first.toString();
   }
 
   checkETHBalance() async {
-    await _web3client.getBalance(_credentials.address).then((value) {
-      addToConsole("", value);
-      addToConsole("", "");
-    }).onError((error, stackTrace) => addToConsole("Error: ", error));
+    var value = await _web3client
+        .getBalance(_credentials.address)
+        .onError((error, stackTrace) {
+      return EtherAmount.zero();
+    });
+    return (value.getInWei / BigInt.from(pow(10, 18))).toStringAsFixed(3);
   }
 }

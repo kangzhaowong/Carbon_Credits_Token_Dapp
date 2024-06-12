@@ -1,0 +1,56 @@
+name: leafdapp_user
+description: "A new Flutter project."
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.2 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  web3dart: ^2.7.3
+  flutter_riverpod: ^2.5.1
+  uuid: ^4.4.0
+  http: ^1.2.1
+  web_socket_channel: ^2.4.5
+  mobile_scanner: ^4.0.1
+  flutter_secure_storage: ^4.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - src/contracts/Leaf.json
+    - assets/img/Carbon footprint NFT_2.png
+    - assets/img/Carbon footprint NFT_1.png
+    - assets/img/leaf.png
+    - assets/img/eth.png
+    - assets/img/Page 3.jpg
+    - assets/img/Page 2.jpg
+    - assets/img/Page 1.jpg
+
+fonts:
+  - family: Gotham
+    fonts:
+      - asset: assets/fonts/Gotham-Black.ttf
+        weight: 100
+      - asset: assets/fonts/Gotham-Bold.ttf
+        weight: 200
+      - asset: assets/fonts/Gotham-Book.ttf
+        weight: 300
+      - asset: assets/fonts/Gotham-Light.ttf
+        weight: 400
+      - asset: assets/fonts/Gotham-Medium.ttf
+        weight: 500
+      - asset: assets/fonts/Gotham-Thin.ttf
+        weight: 600
+      - asset: assets/fonts/Gotham-Ultra.ttf
+        weight: 700
+      - asset: assets/fonts/Gotham-Xlight.ttf
+        weight: 800
