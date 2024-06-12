@@ -6,6 +6,11 @@ Key Deliverables: To produce a mobile application where users are able to collec
 Software Details: Flutter(Front-end), Ethereum (Back-end)
 Required Software: Ganache (Private Ethereum Blockchain), Remix (Compile & Deploy Smart Contract), IDE (To build and run Flutter code)
 
+For the purposes of this project, we will be using Ganache. Ganache will create a simple private Ethereum blockchain along with 10 accounts initialized with 100 Eth. However for real world use cases, the Ethereum mainnet will be used instead, and the accounts used will be the personal accounts of users which they generate on their personal wallet software. In this way, users will be able to access the Eth they obtain from exchanging tokens.
+
+![Usecase_and_Subsystems](https://github.com/kangzhaowong/Carbon_Credits_Token_Dapp/assets/117423228/8e00ddca-1d30-4698-8c80-134f2ead81cc)
+
+
 # Setup Blockchain
 1. Create a new private Ethereum blockchain using Ganache and save it
 2. On Remix, change envrionment to Dev - Ganache. Ganache JSON-RPC Endpoint is the RPC SERVER (usually HTTP://127.0.0.1:7545)
