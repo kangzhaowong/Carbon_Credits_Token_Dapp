@@ -1,8 +1,8 @@
 class Constants {
   static const String RPC_URL =
-      "http://127.0.0.1:7545"; //https://7pt73768-7545.asse.devtunnels.ms/
+      "http://127.0.0.1:7545";
   static const String WS_URL =
-      "ws://127.0.0.1:7545"; //https://7pt73768-7545.asse.devtunnels.ms/
+      "ws://127.0.0.1:7545";
   static const String PRIVATE_KEY =
       "0x3f914bf11607f1984ae40f646d7e5fe50b76e8c97a20d25c83bd1372ab667af4";
   static const int chainId = 1337; //ganache has a chain id of 1337;
