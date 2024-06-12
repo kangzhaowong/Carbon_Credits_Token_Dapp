@@ -10,6 +10,9 @@ For the purposes of this project, we will be using Ganache. Ganache will create 
 
 ![Usecase_and_Subsystems](https://github.com/kangzhaowong/Carbon_Credits_Token_Dapp/assets/117423228/8e00ddca-1d30-4698-8c80-134f2ead81cc)
 
+# User Assumptions
+1. In order to perform write functions to the Ethereum blockchain, the user needs to have an Ethereum account as write functions incur transaction fees. Therefore for this Dapp, we have to assume the user has an existing Ethereum account with enough balance to cover transaction fees is needed.
+2. When exchanging a small amount of tokens, there might be a situation where the transaction fees is higher than the Eth earned, resulting in the user losing Eth instead. For this Dapp, we have to assume the user understands how transaction fees work and exchange tokens in amounts that result in earnings larger than the transaction fees.
 
 # Setup Blockchain
 1. Create a new private Ethereum blockchain using Ganache and save it
@@ -38,7 +41,3 @@ For the purposes of this project, we will be using Ganache. Ganache will create 
  4. In the home tab, pressing the scan QR code button will allow the user to scan for the QR code that allows them to collect their tokens
  5. In the exchange tab, pressing the exchange icon of the partner company will allow the user to enter the amount of tokens they want to exchange and exchange for Ethereums
  6. There is a help button on the home screen which explains how to use the Dapp
-
-# Assumptions for the User
-1. In order to perform write functions to the Ethereum blockchain, the user needs to have an Ethereum account as write functions incur transaction fees. Therefore for this Dapp, we have to assume the user has an existing Ethereum account with enough balance to cover transaction fees is needed.
-2. When exchanging a small amount of tokens, there might be a situation where the transaction fees is higher than the Eth earned, resulting in the user losing Eth instead. For this Dapp, we have to assume the user understands how transaction fees work and exchange tokens in amounts that result in earnings larger than the transaction fees.
